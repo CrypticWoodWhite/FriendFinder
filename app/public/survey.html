@@ -19,7 +19,7 @@
                 <h1 class="title"><i class="fas fa-user-friends"></i> Friend finder</h1>
             </section>
             <section class="main">
-                <form>
+                <form id="survey">
                     <h4>About yourself</h4>
                     <br>
                     <div class="row">
@@ -183,12 +183,43 @@
                     </div>
                 </form>
             </section>
+            <section class="footer">
+                <p>
+                    <a href="">API Friends List</a> | <a href="https://github.com/CrypticWoodWhite/FriendFinder" target="_blank">GitHub Repo</a>
+                </p>
+            </section>
         </div>
-    
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="Assets/javascript/script.js"></script>
 
     </body>
 
 </html>
+
+<script type="text/javascript">
+
+    $("#submit").on("click", function(event) {
+        event.preventDefault();
+
+        var newFriend = {
+            "name": $("#name").val().trim(),
+            "picture": $("#picture").val().trim(),
+            "scores": []
+        };
+        var scoresArr = [];
+        for (var i = 1; i<11; i++) {
+            var questionID = "#question" + [i];
+            var questionScore = $(questionID).val();
+            scoresArr.push(questionScore);
+        }
+        newFriend.scores = scoresArr;
+
+        $.post("/api/friends", newFriend, function(data) {
+            alert("Yay!");
+
+            $("#survey")[0].reset();
+        });
+
+    })
+
+</script>
