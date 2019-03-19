@@ -30,11 +30,12 @@ module.exports = function(app) {
             }, 0);
             allScoreComparisons.push(sum);
         }
+        console.log("array of all score comparisons: " + allScoreComparisons);
 
         minScore = Math.min.apply(Math, allScoreComparisons);
         findIndex = allScoreComparisons.indexOf(minScore);
         friendObj = friendsArray[findIndex];
 
-        alert("Your new BFF is " + friendObj.name + "! <br>");
+        console.log("Your new BFF is " + friendObj.name + "! <br>");
     });
 }

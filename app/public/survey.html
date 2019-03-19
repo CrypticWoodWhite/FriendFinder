@@ -215,11 +215,16 @@
         }
         newFriend.scores = scoresArr;
 
-        $.post("https://cors-anywhere.herokuapp.com//api/friends", newFriend)
-            .then(function(data) {
-                alert("Yay!");
-                $("#survey")[0].reset();
-            });
+        $.post("https://cors-anywhere.herokuapp.com//api/friends", newFriend, function(data) {
+            alert("Yay!");
+            $("#survey")[0].reset();
+        });
+
+        $.ajax({ url: "/api/friends", method: "GET" })
+            .then(function(friendsArray) {
+                console.log(friendsArray);
+            }
+        );
     })
 
 </script>
