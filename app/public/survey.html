@@ -202,7 +202,7 @@
     $("#submit").on("click", function(event) {
         event.preventDefault();
 
-        // collect data entered by client (newFriend)
+        // collect data entered by client "newFriend"
         let newFriend = {
             "name": $("#name").val().trim(),
             "picture": $("#picture").val().trim(),
@@ -215,54 +215,63 @@
             scoresArr.push(questionScore);
         }
         newFriend.scores = scoresArr;
-        console.log(newFriend);
 
         // send data to /api/friends
         $.post("/api/friends", newFriend, function(data) {
-            if (!data) {
-                alert("BOO!");
-                
-            }
-            else {
-                alert("YAY!");
+            if (data) {
                 $("#survey")[0].reset();
             }
-
+            else {
+                alert("There was a problem with your answers, please review and resend");
+            }
         });
 
-        // $.ajax({ url: "https://cors-anywhere.herokuapp.com//api/friends", method: "GET" })
-        //     .then(function(friendsArray) {
-        //         console.log(friendsArray);
-        //     }
-        // );
+        // retrieve array of Friends and find match
+        $.ajax({ url: "/api/friends", method: "GET" })
+            .then(function(friendsArray) {
+                console.log(friendsArray);
 
-        /////////////////////////////////
-        // compatibility logic below
 
-        // let lastAdded = friendsArray[friendsArray.length-1]; // assume last added is the current user
-        // let allScoreComparisons = [];
-        // let sum;
-        // let minScore;
-        // let findIndex;
-        // let friendObj;
+            /////////////////////////////////
+            // compatibility logic below
+            function findMatch() {
+                let lastAdded = friendsArray[friendsArray.length-1]; // last added is the current user
+                let allScoreComparisons = [];
+                let sum;
+                let minScore;
+                let findIndex;
+                let friendObj;
+                let questScores = [];
 
-        // for (const i=0; i<friendsArray.length; i++) {
-        //     for (const j=1; j<10; j++) {
-        //         let questScores = [];
-        //         questScores.push(Math.abs(lastAdded[j] - friendsArray[i][j]));
-        //     }
-        //     sum = questScores.reduce(function(accumulator, currentValue) {
-        //         return accumulator + currentValue;
-        //     }, 0);
-        //     allScoreComparisons.push(sum);
-        // }
-        // console.log("array of all score comparisons: " + allScoreComparisons);
+                for (let i=0; i<friendsArray.length; i++) {
+                    // find differences between each pair of scores for all Friends and the current user
+                    for (let j=1; j<10; j++) {
+                        questScores.push(Math.abs(lastAdded[j] - friendsArray[i[j]]));
+                    }
+                    // sum scores for each pairing
+                    sum = questScores.reduce(function(accumulator, currentValue) {
+                        return accumulator + currentValue;
+                    }, 0);
+                    allScoreComparisons.push(sum);
+                }
+                console.log("array of all score comparisons: " + allScoreComparisons);
+                // find smallest score
+                minScore = Math.min.apply(Math, allScoreComparisons);
+                // find index of smallest score
+                findIndex = allScoreComparisons.indexOf(minScore);
+                // use that index to find the Friend user will be shown
+                friendObj = friendsArray[findIndex];
 
-        // minScore = Math.min.apply(Math, allScoreComparisons);
-        // findIndex = allScoreComparisons.indexOf(minScore);
-        // friendObj = friendsArray[findIndex];
+                console.log("Your new BFF is " + friendObj.name + "! <br>");
+            }
 
-        // console.log("Your new BFF is " + friendObj.name + "! <br>");
+        findMatch();
+
+
+            }
+        );
+
+
 
     })
 

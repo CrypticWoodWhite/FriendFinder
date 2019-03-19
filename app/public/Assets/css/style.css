@@ -42,8 +42,9 @@ body {
     justify-content: center
 }
 
-select {
-
+img {
+    max-height: 500px;
+    width: auto;
 }
 
 
