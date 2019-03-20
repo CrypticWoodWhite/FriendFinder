@@ -10,10 +10,5 @@ module.exports = function(app) {
         friendsArray.push(req.body);
         res.json(true);
     });
-
-    // Empty out the arrays of data, for debugging and testing purposes only
-    app.post("/api/clear", function(req, res) {
-        friendsArray.length = [];
-        res.json({ ok: true });
-    });
+    
 }
