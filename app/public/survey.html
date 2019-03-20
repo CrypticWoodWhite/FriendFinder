@@ -229,44 +229,44 @@
         // retrieve array of Friends and find match
         $.ajax({ url: "/api/friends", method: "GET" })
             .then(function(friendsArray) {
-                console.log(friendsArray);
+                let length = friendsArray.length;
 
-
-            /////////////////////////////////
-            // compatibility logic below
-            function findMatch() {
-                let lastAdded = friendsArray[friendsArray.length-1]; // last added is the current user
+                /////////////////////////////////
+                // compatibility logic below
+                let lastAdded = friendsArray[length - 1]; // last added is the current user
                 let allScoreComparisons = [];
                 let sum;
                 let minScore;
                 let findIndex;
                 let friendObj;
-                let questScores = [];
+                let currentFriend;
+                let questScores;
 
-                for (let i=0; i<friendsArray.length; i++) {
+                for (let i=0; i< length-1; i++) {
+                    questScores = [];
+                    let currentFriend = friendsArray[i];
                     // find differences between each pair of scores for all Friends and the current user
-                    for (let j=1; j<10; j++) {
-                        questScores.push(Math.abs(lastAdded[j] - friendsArray[i[j]]));
+                    for (let j=0; j<10; j++) {
+                        questScores.push(Math.abs(lastAdded.scores[j] - currentFriend.scores[j]));
                     }
                     // sum scores for each pairing
                     sum = questScores.reduce(function(accumulator, currentValue) {
                         return accumulator + currentValue;
                     }, 0);
+                    // add sum of scores to array
                     allScoreComparisons.push(sum);
                 }
                 console.log("array of all score comparisons: " + allScoreComparisons);
-                // find smallest score
+                // find smallest score in the array
                 minScore = Math.min.apply(Math, allScoreComparisons);
                 // find index of smallest score
                 findIndex = allScoreComparisons.indexOf(minScore);
                 // use that index to find the Friend user will be shown
+                // what if there's more than one?
                 friendObj = friendsArray[findIndex];
+                console.log(friendObj);
 
-                console.log("Your new BFF is " + friendObj.name + "! <br>");
-            }
-
-        findMatch();
-
+                alert("Your new BFF is " + friendObj.name + "!");
 
             }
         );

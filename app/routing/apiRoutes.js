@@ -10,4 +10,11 @@ module.exports = function(app) {
         friendsArray.push(req.body);
         res.json(true);
     });
+
+    // Empty out the arrays of data
+    app.post("/api/clear", function(req, res) {
+        friendsArray.length = [];
+    
+        res.json({ ok: true });
+    });
 }
